@@ -1,41 +1,53 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // ==================== Dữ liệu & Storage ====================
+    // ==================== Key Admin ====================
     const ADMIN_KEY = 'STORENGUYENLONGIOS';
     let currentUser = null;
     let currentKeyData = null;
-    let selectedGame = 'ff';
 
+    // ==================== Storage Key ====================
     function loadKeys() {
         const stored = localStorage.getItem('aimtrick_keys');
         if (stored) return JSON.parse(stored);
         const defaultKeys = [
+            { key: 'KEY-HFTOK9981', type: 'vip', expiry: '2026-04-22T11:39:15', devices: 2 },
             { key: 'KEY-VIP001', type: 'vip', expiry: '2026-05-20T23:59:59', devices: 3 },
-            { key: 'KEY-NORM001', type: 'normal', expiry: '2026-05-15T23:59:59', devices: 1 },
-            { key: 'KEY-HFTOK9981', type: 'vip', expiry: '2026-04-22T11:39:15', devices: 2 }
+            { key: 'KEY-NORM001', type: 'normal', expiry: '2026-05-15T23:59:59', devices: 1 }
         ];
         localStorage.setItem('aimtrick_keys', JSON.stringify(defaultKeys));
         return defaultKeys;
     }
 
-    function saveKeys(keys) {
-        localStorage.setItem('aimtrick_keys', JSON.stringify(keys));
+    function saveKeys(arr) {
+        localStorage.setItem('aimtrick_keys', JSON.stringify(arr));
     }
 
     let keys = loadKeys();
 
     // ==================== UI Elements ====================
-    const navItems = document.querySelectorAll('.nav-item');
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const menuDropdown = document.getElementById('menuDropdown');
+    const menuItems = document.querySelectorAll('.menu-item');
     const tabPanes = document.querySelectorAll('.tab-pane');
+
     const loginBox = document.getElementById('loginBox');
+    const homeContent = document.getElementById('homeContent');
     const activePanel = document.getElementById('activePanel');
     const monitorPanel = document.getElementById('monitorPanel');
     const keyInput = document.getElementById('keyInput');
     const loginBtn = document.getElementById('loginBtn');
-    const vipToggles = document.getElementById('vipToggles');
-    const basicToggles = document.getElementById('basicToggles');
-    const activeKeyDisplay = document.getElementById('activeKeyDisplay');
-    const keyExpiryDisplay = document.getElementById('keyExpiryDisplay');
-    const keyInfoContent = document.getElementById('keyInfoContent');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    const displayKey = document.getElementById('displayKey');
+    const expiryCountdown = document.getElementById('expiryCountdown');
+    const expiryDateDisplay = document.getElementById('expiryDateDisplay');
+    const keyExpiryMini = document.getElementById('keyExpiryMini');
+
+    // Toggle elements
+    const toggleAim = document.getElementById('toggleAimTrickHead');
+    const toggleBamDau = document.getElementById('toggleBamDau');
+    const toggleNheTam = document.getElementById('toggleNheTam');
+
+    // Admin
     const adminPanel = document.getElementById('adminPanel');
     const keyListContainer = document.getElementById('keyListContainer');
     const createKeyBtn = document.getElementById('createKeyBtn');
@@ -43,23 +55,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const newKeyDays = document.getElementById('newKeyDays');
     const newKeyDevices = document.getElementById('newKeyDevices');
     const newKeyType = document.getElementById('newKeyType');
+
+    // Monitor
     const monitorLog = document.getElementById('monitorLog');
     const monitorGames = document.querySelectorAll('.monitor-game');
-    const gameBtns = document.querySelectorAll('.game-btn');
-
-    // Toggle inputs
-    const toggleFixRungTam = document.getElementById('toggleFixRungTam');
-    const toggleFixLoDau = document.getElementById('toggleFixLoDau');
-    const toggleFixLag = document.getElementById('toggleFixLag');
-    const toggleAimLock = document.getElementById('toggleAimLock');
-    const toggleBamDau = document.getElementById('toggleBamDau');
-    const toggleNheTam = document.getElementById('toggleNheTam');
 
     // ==================== Hàm tiện ích ====================
-    function canUseBasicFeatures() {
-        return currentUser && (currentKeyData.type === 'normal' || currentKeyData.type === 'vip' || currentKeyData.type === 'admin');
-    }
-
     function canUseVipFeatures() {
         return currentUser && (currentKeyData.type === 'vip' || currentKeyData.type === 'admin');
     }
@@ -74,190 +75,115 @@ document.addEventListener('DOMContentLoaded', function() {
         monitorLog.scrollTop = monitorLog.scrollHeight;
     }
 
-    // ==================== Các hàm CUSTOM (bạn thêm code ở đây) ====================
-    function customEnableFixRungTam() {
-        // ====== THÊM CODE CỦA BẠN KHI BẬT FIX RUNG TÂM ======
+    function updateCountdownUI() {
+        if (!currentKeyData) return;
+        const expiry = new Date(currentKeyData.expiry);
+        const now = new Date();
+        const diff = expiry - now;
+        if (diff <= 0) {
+            expiryCountdown.textContent = 'Hết hạn';
+            keyExpiryMini.textContent = 'Key đã hết hạn';
+            return;
+        }
+        const d = Math.floor(diff / (1000*60*60*24));
+        const h = Math.floor((diff / (1000*60*60)) % 24);
+        const m = Math.floor((diff / (1000*60)) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+        const text = `${d} ngày ${h} giờ ${m} phút ${s} giây`;
+        expiryCountdown.textContent = text;
+        keyExpiryMini.textContent = 'Key còn hiệu lực: ' + text;
     }
 
-    function customDisableFixRungTam() {
-        // ====== THÊM CODE CỦA BẠN KHI TẮT FIX RUNG TÂM ======
+    // ==================== CÁC HÀM CUSTOM – THÊM CODE CỦA BẠN VÀO ĐÂY ====================
+    // Mỗi hàm nhận tham số isEnabled (true: bật, false: tắt)
+    // Bạn chỉ cần viết code vào bên trong, dùng if (isEnabled) { ... } else { ... }
+
+    function aimTrickHeadCustom(isEnabled) {
+        // ====== THÊM CODE CỦA BẠN CHO AIMTRICKHEAD ======
+        if (isEnabled) {
+            // Code khi bật AimTrickHead
+        } else {
+            // Code khi tắt AimTrickHead (dọn dẹp, dừng tiến trình)
+        }
     }
 
-    function customEnableFixLoDau() {
-        // ====== THÊM CODE CỦA BẠN KHI BẬT FIX LỐ ĐẦU ======
+    function bamDauCustom(isEnabled) {
+        // ====== THÊM CODE CỦA BẠN CHO BÁM ĐẦU ======
+        if (isEnabled) {
+            // Code khi bật Bám Đầu
+        } else {
+            // Code khi tắt Bám Đầu
+        }
     }
 
-    function customDisableFixLoDau() {
-        // ====== THÊM CODE CỦA BẠN KHI TẮT FIX LỐ ĐẦU ======
+    function nheTamCustom(isEnabled) {
+        // ====== THÊM CODE CỦA BẠN CHO NHẸ TÂM ======
+        if (isEnabled) {
+            // Code khi bật Nhẹ Tâm
+        } else {
+            // Code khi tắt Nhẹ Tâm
+        }
     }
 
-    function customEnableFixLag() {
-        // ====== THÊM CODE CỦA BẠN KHI BẬT FIX LAG ======
+    // ==================== Xử lý bật/tắt (gọi hàm custom + log) ====================
+    function handleAimTrickHead(checked) {
+        if (!canUseVipFeatures()) {
+            toggleAim.checked = false; // không cho bật nếu không có quyền
+            return;
+        }
+        aimTrickHeadCustom(checked);
+        addLogLine('AimTrickHead ' + (checked ? 'ON' : 'OFF'));
     }
 
-    function customDisableFixLag() {
-        // ====== THÊM CODE CỦA BẠN KHI TẮT FIX LAG ======
+    function handleBamDau(checked) {
+        if (!canUseVipFeatures()) {
+            toggleBamDau.checked = false;
+            return;
+        }
+        bamDauCustom(checked);
+        addLogLine('Bám Đầu ' + (checked ? 'ON' : 'OFF'));
     }
 
-    function customEnableAimLock() {
-        // ====== THÊM CODE CỦA BẠN KHI BẬT AIMLOCK ======
+    function handleNheTam(checked) {
+        if (!canUseVipFeatures()) {
+            toggleNheTam.checked = false;
+            return;
+        }
+        nheTamCustom(checked);
+        addLogLine('Nhẹ Tâm ' + (checked ? 'ON' : 'OFF'));
     }
 
-    function customDisableAimLock() {
-        // ====== THÊM CODE CỦA BẠN KHI TẮT AIMLOCK ======
-    }
-
-    function customEnableBamDau() {
-        // ====== THÊM CODE CỦA BẠN KHI BẬT BÁM ĐẦU ======
-    }
-
-    function customDisableBamDau() {
-        // ====== THÊM CODE CỦA BẠN KHI TẮT BÁM ĐẦU ======
-    }
-
-    function customEnableNheTam() {
-        // ====== THÊM CODE CỦA BẠN KHI BẬT NHẸ TÂM ======
-    }
-
-    function customDisableNheTam() {
-        // ====== THÊM CODE CỦA BẠN KHI TẮT NHẸ TÂM ======
-    }
-
-    // ==================== Hàm bật/tắt từng chức năng (gọi custom) ====================
-    function enableFixRungTam() {
-        if (!canUseBasicFeatures()) return;
-        customEnableFixRungTam();
-        addLogLine('Fix Rung Tâm đã bật');
-    }
-
-    function disableFixRungTam() {
-        customDisableFixRungTam();
-        addLogLine('Fix Rung Tâm đã tắt');
-    }
-
-    function enableFixLoDau() {
-        if (!canUseBasicFeatures()) return;
-        customEnableFixLoDau();
-        addLogLine('Fix Lố Đầu đã bật');
-    }
-
-    function disableFixLoDau() {
-        customDisableFixLoDau();
-        addLogLine('Fix Lố Đầu đã tắt');
-    }
-
-    function enableFixLag() {
-        if (!canUseBasicFeatures()) return;
-        customEnableFixLag();
-        addLogLine('Fix Lag đã bật');
-    }
-
-    function disableFixLag() {
-        customDisableFixLag();
-        addLogLine('Fix Lag đã tắt');
-    }
-
-    function enableAimLock() {
-        if (!canUseVipFeatures()) return;
-        customEnableAimLock();
-        addLogLine('AimLock đã bật');
-    }
-
-    function disableAimLock() {
-        customDisableAimLock();
-        addLogLine('AimLock đã tắt');
-    }
-
-    function enableBamDau() {
-        if (!canUseVipFeatures()) return;
-        customEnableBamDau();
-        addLogLine('Bám Đầu đã bật');
-    }
-
-    function disableBamDau() {
-        customDisableBamDau();
-        addLogLine('Bám Đầu đã tắt');
-    }
-
-    function enableNheTam() {
-        if (!canUseVipFeatures()) return;
-        customEnableNheTam();
-        addLogLine('Nhẹ Tâm đã bật');
-    }
-
-    function disableNheTam() {
-        customDisableNheTam();
-        addLogLine('Nhẹ Tâm đã tắt');
-    }
-
-    // ==================== Gắn sự kiện cho toggle ====================
-    toggleFixRungTam.addEventListener('change', function() {
-        this.checked ? enableFixRungTam() : disableFixRungTam();
+    // Gắn sự kiện cho 3 toggle
+    toggleAim.addEventListener('change', function() {
+        handleAimTrickHead(this.checked);
     });
-
-    toggleFixLoDau.addEventListener('change', function() {
-        this.checked ? enableFixLoDau() : disableFixLoDau();
-    });
-
-    toggleFixLag.addEventListener('change', function() {
-        this.checked ? enableFixLag() : disableFixLag();
-    });
-
-    toggleAimLock.addEventListener('change', function() {
-        this.checked ? enableAimLock() : disableAimLock();
-    });
-
     toggleBamDau.addEventListener('change', function() {
-        this.checked ? enableBamDau() : disableBamDau();
+        handleBamDau(this.checked);
     });
-
     toggleNheTam.addEventListener('change', function() {
-        this.checked ? enableNheTam() : disableNheTam();
+        handleNheTam(this.checked);
     });
 
-    // ==================== Chuyển tab ====================
-    navItems.forEach(item => {
+    // ==================== Menu 3 sọc ====================
+    hamburgerBtn.addEventListener('click', () => {
+        menuDropdown.classList.toggle('hidden');
+    });
+
+    menuItems.forEach(item => {
         item.addEventListener('click', () => {
-            const tabName = item.getAttribute('data-tab');
-            navItems.forEach(i => i.classList.remove('active'));
-            item.classList.add('active');
-            tabPanes.forEach(pane => pane.classList.remove('active'));
-            document.getElementById(tabName).classList.add('active');
-            if (tabName === 'keyinfo') updateKeyInfoTab();
-            if (tabName === 'admininfo') updateAdminInfoTab();
+            const tab = item.getAttribute('data-tab');
+            menuDropdown.classList.add('hidden');
+            tabPanes.forEach(p => p.classList.remove('active'));
+            document.getElementById(tab).classList.add('active');
+            if (tab === 'keyinfo') updateKeyInfoTab();
+            if (tab === 'admininfo') updateAdminInfoTab();
         });
     });
 
-    // ==================== Chọn game ====================
-    function setSelectedGame(game) {
-        selectedGame = game;
-        gameBtns.forEach(btn => {
-            const btnGame = btn.getAttribute('data-game');
-            if (btnGame === game) btn.classList.add('active');
-            else btn.classList.remove('active');
-        });
-        monitorGames.forEach(mg => {
-            const mgGame = mg.getAttribute('data-game');
-            if (mgGame === game) mg.classList.add('active');
-            else mg.classList.remove('active');
-        });
-        const gameName = game === 'ff' ? 'FF THƯỜNG' : 'FF MAX';
-        addLogLine(`Đã chọn game: ${gameName}`);
-        addLogLine(`--> entering ${gameName}...`);
-    }
-
-    gameBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const game = btn.getAttribute('data-game');
-            setSelectedGame(game);
-        });
-    });
-
-    monitorGames.forEach(mg => {
-        mg.addEventListener('click', () => {
-            const game = mg.getAttribute('data-game');
-            setSelectedGame(game);
-        });
+    document.addEventListener('click', (e) => {
+        if (!hamburgerBtn.contains(e.target) && !menuDropdown.contains(e.target)) {
+            menuDropdown.classList.add('hidden');
+        }
     });
 
     // ==================== Đăng nhập ====================
@@ -276,52 +202,34 @@ document.addEventListener('DOMContentLoaded', function() {
                 expiry: '2099-12-31T23:59:59',
                 devices: 999
             };
-            loginSuccess();
-            return;
+        } else {
+            const found = keys.find(k => k.key === inputKey);
+            if (!found) {
+                alert('Key không hợp lệ');
+                return;
+            }
+            if (new Date(found.expiry) < new Date()) {
+                alert('Key đã hết hạn');
+                return;
+            }
+            currentUser = 'user';
+            currentKeyData = found;
         }
 
-        const foundKey = keys.find(k => k.key === inputKey);
-        if (!foundKey) {
-            alert('Key không hợp lệ hoặc đã bị xóa!');
-            return;
-        }
-
-        if (new Date(foundKey.expiry) < new Date()) {
-            alert('Key đã hết hạn! Vui lòng sử dụng key khác.');
-            return;
-        }
-
-        currentUser = 'user';
-        currentKeyData = foundKey;
-        loginSuccess();
-    });
-
-    function loginSuccess() {
+        // Hiện giao diện
         loginBox.classList.add('hidden');
+        homeContent.style.display = 'block';
         activePanel.classList.remove('hidden');
         monitorPanel.classList.remove('hidden');
+        logoutBtn.style.display = 'inline-block';
 
-        const type = currentKeyData.type;
-        activeKeyDisplay.innerHTML = `<strong>Key:</strong> ${currentKeyData.key} (${type === 'vip' ? 'VIP' : type === 'normal' ? 'Thường' : 'Admin'})`;
-        const expiryDate = new Date(currentKeyData.expiry);
-        keyExpiryDisplay.innerHTML = `<strong>Hết hạn lúc:</strong> ${expiryDate.toLocaleString('vi-VN')} | <strong>Thiết bị tối đa:</strong> ${currentKeyData.devices}`;
+        // Điền thông tin key
+        displayKey.textContent = currentKeyData.key;
+        expiryDateDisplay.textContent = new Date(currentKeyData.expiry).toLocaleString('vi-VN');
+        updateCountdownUI();
+        setInterval(updateCountdownUI, 1000);
 
-        if (type === 'vip' || type === 'admin') {
-            basicToggles.style.display = 'flex';
-            vipToggles.style.display = 'flex';
-        } else if (type === 'normal') {
-            basicToggles.style.display = 'flex';
-            vipToggles.style.display = 'none';
-        }
-
-        // Reset tất cả toggle về OFF
-        toggleFixRungTam.checked = false;
-        toggleFixLoDau.checked = false;
-        toggleFixLag.checked = false;
-        toggleAimLock.checked = false;
-        toggleBamDau.checked = false;
-        toggleNheTam.checked = false;
-
+        // Admin
         if (currentUser === 'admin') {
             adminPanel.classList.remove('hidden');
             renderKeyList();
@@ -329,25 +237,60 @@ document.addEventListener('DOMContentLoaded', function() {
             adminPanel.classList.add('hidden');
         }
 
+        // Reset toggle về OFF và gọi custom (tắt nếu cần)
+        toggleAim.checked = false;
+        toggleBamDau.checked = false;
+        toggleNheTam.checked = false;
+        // Gọi custom để dọn dẹp (vì chuyển từ trạng thái cũ nếu có sang tắt)
+        aimTrickHeadCustom(false);
+        bamDauCustom(false);
+        nheTamCustom(false);
+
         updateKeyInfoTab();
         updateAdminInfoTab();
         addLogLine('Đăng nhập thành công, key: ' + currentKeyData.key);
-        const gameName = selectedGame === 'ff' ? 'FF THƯỜNG' : 'FF MAX';
-        addLogLine(`Hệ thống vào game: ${gameName}`);
-    }
+    });
 
+    // Đăng xuất
+    logoutBtn.addEventListener('click', () => {
+        // Tắt tất cả chức năng trước khi đăng xuất
+        if (toggleAim.checked) {
+            toggleAim.checked = false;
+            aimTrickHeadCustom(false);
+        }
+        if (toggleBamDau.checked) {
+            toggleBamDau.checked = false;
+            bamDauCustom(false);
+        }
+        if (toggleNheTam.checked) {
+            toggleNheTam.checked = false;
+            nheTamCustom(false);
+        }
+
+        currentUser = null;
+        currentKeyData = null;
+        loginBox.classList.remove('hidden');
+        homeContent.style.display = 'none';
+        activePanel.classList.add('hidden');
+        monitorPanel.classList.add('hidden');
+        logoutBtn.style.display = 'none';
+        keyInput.value = '';
+        addLogLine('Đã đăng xuất');
+    });
+
+    // ==================== Thông tin key & admin ====================
     function updateKeyInfoTab() {
+        const content = document.getElementById('keyInfoContent');
         if (!currentKeyData) {
-            keyInfoContent.innerHTML = '<p>Vui lòng đăng nhập để xem thông tin key.</p>';
+            content.innerHTML = '<p>Vui lòng đăng nhập để xem thông tin key.</p>';
             return;
         }
         const typeText = currentKeyData.type === 'vip' ? 'VIP' : currentKeyData.type === 'normal' ? 'Thường' : 'Admin';
-        keyInfoContent.innerHTML = `
+        content.innerHTML = `
             <p><strong>Key:</strong> ${currentKeyData.key}</p>
             <p><strong>Loại:</strong> ${typeText}</p>
-            <p><strong>Ngày hết hạn:</strong> ${new Date(currentKeyData.expiry).toLocaleString('vi-VN')}</p>
-            <p><strong>Số thiết bị tối đa:</strong> ${currentKeyData.devices}</p>
-            <p><strong>Trạng thái:</strong> ${new Date(currentKeyData.expiry) > new Date() ? 'Còn hiệu lực' : 'Hết hạn'}</p>
+            <p><strong>Hết hạn:</strong> ${new Date(currentKeyData.expiry).toLocaleString('vi-VN')}</p>
+            <p><strong>Thiết bị:</strong> ${currentKeyData.devices}</p>
         `;
     }
 
@@ -360,138 +303,110 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // ==================== Admin: Quản lý key ====================
+    // ==================== Admin Panel ====================
     function renderKeyList() {
-        if (currentUser !== 'admin') return;
         keys = loadKeys();
         if (keys.length === 0) {
-            keyListContainer.innerHTML = '<p>Chưa có key nào.</p>';
+            keyListContainer.innerHTML = '<p>Chưa có key.</p>';
             return;
         }
         let html = '';
         keys.forEach(k => {
             html += `
                 <div class="key-item">
-                    <span>${k.key} (${k.type}) - Hết hạn: ${new Date(k.expiry).toLocaleDateString('vi-VN')} - TB: ${k.devices}</span>
+                    <span>${k.key} (${k.type}) - ${new Date(k.expiry).toLocaleDateString('vi-VN')} - TB:${k.devices}</span>
                     <button onclick="deleteKey('${k.key}')">Xóa</button>
-                </div>
-            `;
+                </div>`;
         });
         keyListContainer.innerHTML = html;
     }
 
-    window.deleteKey = function(keyToDelete) {
+    window.deleteKey = function(keyDel) {
         if (currentUser !== 'admin') return;
-        if (!confirm(`Bạn có chắc muốn xóa key ${keyToDelete}?`)) return;
-        keys = keys.filter(k => k.key !== keyToDelete);
+        if (!confirm('Xóa key ' + keyDel + '?')) return;
+        keys = keys.filter(k => k.key !== keyDel);
         saveKeys(keys);
         renderKeyList();
-        addLogLine('Admin deleted key: ' + keyToDelete);
-        alert('Đã xóa key!');
+        addLogLine('Admin deleted key: ' + keyDel);
     };
 
     createKeyBtn.addEventListener('click', () => {
-        if (currentUser !== 'admin') {
-            alert('Bạn không có quyền!');
-            return;
-        }
+        if (currentUser !== 'admin') return;
         const keyStr = newKeyString.value.trim();
         const days = parseInt(newKeyDays.value) || 7;
         const devices = parseInt(newKeyDevices.value) || 1;
         const type = newKeyType.value;
+        if (!keyStr) { alert('Nhập key'); return; }
+        if (keys.some(k => k.key === keyStr)) { alert('Key tồn tại'); return; }
 
-        if (!keyStr) {
-            alert('Vui lòng nhập key!');
-            return;
-        }
-        if (keys.some(k => k.key === keyStr)) {
-            alert('Key đã tồn tại!');
-            return;
-        }
-
-        const expiryDate = new Date();
-        expiryDate.setDate(expiryDate.getDate() + days);
-        const newKey = {
-            key: keyStr,
-            type: type,
-            expiry: expiryDate.toISOString(),
-            devices: devices
-        };
-        keys.push(newKey);
+        const exp = new Date();
+        exp.setDate(exp.getDate() + days);
+        keys.push({ key: keyStr, type, expiry: exp.toISOString(), devices });
         saveKeys(keys);
         renderKeyList();
-        addLogLine(`Admin created key: ${keyStr} (${type}), ${days} days, ${devices} devices`);
-        alert('Tạo key thành công!');
+        addLogLine(`Admin created key: ${keyStr} (${type})`);
+        alert('Tạo key thành công');
         newKeyString.value = '';
-        newKeyDays.value = 7;
-        newKeyDevices.value = 1;
+    });
+
+    // ==================== Monitor & game ====================
+    monitorGames.forEach(g => {
+        g.addEventListener('click', () => {
+            monitorGames.forEach(x => x.classList.remove('active'));
+            g.classList.add('active');
+            addLogLine('Monitor focus: ' + g.textContent);
+        });
     });
 
     // ==================== Hiệu ứng tuyết ====================
     const canvas = document.getElementById('snowCanvas');
     const ctx = canvas.getContext('2d');
     let snowflakes = [];
-    const snowflakeCount = 80;
+    const count = 80;
 
-    function resizeCanvas() {
-        const app = document.getElementById('app');
-        canvas.width = app.clientWidth;
-        canvas.height = app.clientHeight;
+    function resize() {
+        canvas.width = canvas.parentElement.clientWidth;
+        canvas.height = canvas.parentElement.clientHeight;
     }
-
-    function createSnowflakes() {
+    function create() {
         snowflakes = [];
-        for (let i = 0; i < snowflakeCount; i++) {
+        for (let i=0;i<count;i++) {
             snowflakes.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                radius: Math.random() * 2.5 + 1,
-                speedY: Math.random() * 0.5 + 0.2,
-                speedX: Math.random() * 0.2 - 0.1,
-                opacity: Math.random() * 0.7 + 0.3
+                x: Math.random()*canvas.width,
+                y: Math.random()*canvas.height,
+                r: Math.random()*2.5+1,
+                spY: Math.random()*0.5+0.2,
+                spX: Math.random()*0.2-0.1,
+                op: Math.random()*0.7+0.3
             });
         }
     }
-
-    function drawSnow() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (let flake of snowflakes) {
+    function draw() {
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        for (let f of snowflakes) {
             ctx.beginPath();
-            ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255, 255, 255, ${flake.opacity})`;
+            ctx.arc(f.x, f.y, f.r, 0, Math.PI*2);
+            ctx.fillStyle = `rgba(255,255,255,${f.op})`;
             ctx.fill();
         }
     }
-
-    function updateSnow() {
-        for (let flake of snowflakes) {
-            flake.y += flake.speedY;
-            flake.x += flake.speedX;
-            if (flake.y > canvas.height + flake.radius) {
-                flake.y = -flake.radius;
-                flake.x = Math.random() * canvas.width;
-            }
-            if (flake.x > canvas.width + flake.radius) flake.x = -flake.radius;
-            if (flake.x < -flake.radius) flake.x = canvas.width + flake.radius;
+    function update() {
+        for (let f of snowflakes) {
+            f.y += f.spY;
+            f.x += f.spX;
+            if (f.y > canvas.height+f.r) { f.y = -f.r; f.x = Math.random()*canvas.width; }
+            if (f.x > canvas.width+f.r) f.x = -f.r;
+            if (f.x < -f.r) f.x = canvas.width+f.r;
         }
     }
-
-    function snowLoop() {
-        drawSnow();
-        updateSnow();
-        requestAnimationFrame(snowLoop);
+    function loop() {
+        draw();
+        update();
+        requestAnimationFrame(loop);
     }
+    window.addEventListener('resize', ()=>{ resize(); create(); });
+    resize(); create(); loop();
 
-    window.addEventListener('resize', () => {
-        resizeCanvas();
-        createSnowflakes();
-    });
-
-    resizeCanvas();
-    createSnowflakes();
-    snowLoop();
-
-    // Khởi tạo
+    // Khởi động
     addLogLine('Hệ thống sẵn sàng...');
-    setSelectedGame('ff');
 });
