@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const menuDropdown = document.getElementById('menuDropdown');
     const menuItems = document.querySelectorAll('.menu-item');
-    const tabPanes = document.querySelectorAll('.tab-pane');
+    const tabPanes = document.querySelectorAll('.tab-pane'); // Các tab chính (home, keyinfo, admininfo)
 
     const loginBox = document.getElementById('loginBox');
     const homeContent = document.getElementById('homeContent');
@@ -59,6 +59,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Monitor
     const monitorLog = document.getElementById('monitorLog');
     const monitorGames = document.querySelectorAll('.monitor-game');
+
+    // Subtabs (Main, Optimize+, Social, TikTok)
+    const subTabs = document.querySelectorAll('.tab');
+    const subTabPanes = document.querySelectorAll('.subtab-pane');
 
     // ==================== Hàm tiện ích ====================
     function canUseVipFeatures() {
@@ -95,15 +99,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ==================== CÁC HÀM CUSTOM – THÊM CODE CỦA BẠN VÀO ĐÂY ====================
-    // Mỗi hàm nhận tham số isEnabled (true: bật, false: tắt)
-    // Bạn chỉ cần viết code vào bên trong, dùng if (isEnabled) { ... } else { ... }
-
     function aimTrickHeadCustom(isEnabled) {
         // ====== THÊM CODE CỦA BẠN CHO AIMTRICKHEAD ======
         if (isEnabled) {
             // Code khi bật AimTrickHead
         } else {
-            // Code khi tắt AimTrickHead (dọn dẹp, dừng tiến trình)
+            // Code khi tắt AimTrickHead
         }
     }
 
@@ -128,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // ==================== Xử lý bật/tắt (gọi hàm custom + log) ====================
     function handleAimTrickHead(checked) {
         if (!canUseVipFeatures()) {
-            toggleAim.checked = false; // không cho bật nếu không có quyền
+            toggleAim.checked = false;
             return;
         }
         aimTrickHeadCustom(checked);
@@ -186,6 +187,26 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // ==================== Xử lý subtab (Main, Optimize+, Social, TikTok) ====================
+    subTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Bỏ active tất cả tab
+            subTabs.forEach(t => t.classList.remove('active'));
+            // Thêm active cho tab hiện tại
+            tab.classList.add('active');
+            // Ẩn tất cả pane
+            subTabPanes.forEach(pane => pane.classList.remove('active'));
+            // Hiện pane tương ứng
+            const target = tab.getAttribute('data-subtab');
+            const targetPane = document.getElementById('subtab-' + target);
+            if (targetPane) {
+                targetPane.classList.add('active');
+            }
+            // Log
+            addLogLine('Tab: ' + tab.textContent);
+        });
+    });
+
     // ==================== Đăng nhập ====================
     loginBtn.addEventListener('click', () => {
         const inputKey = keyInput.value.trim();
@@ -241,7 +262,6 @@ document.addEventListener('DOMContentLoaded', function() {
         toggleAim.checked = false;
         toggleBamDau.checked = false;
         toggleNheTam.checked = false;
-        // Gọi custom để dọn dẹp (vì chuyển từ trạng thái cũ nếu có sang tắt)
         aimTrickHeadCustom(false);
         bamDauCustom(false);
         nheTamCustom(false);
