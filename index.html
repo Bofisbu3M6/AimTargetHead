@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>AimTargetHead - Hỗ Trợ Kéo Tâm</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <canvas id="snowCanvas"></canvas>
+        <div class="header">
+            <div class="title">AimTargetHead</div>
+            <div class="subtitle">BUY KEY INBOX ZALO: 0933653553</div>
+            <div class="brand">CRE NGUYENLONGIOS - AIMTARGETHEAD</div>
+        </div>
+
+        <div class="navbar">
+            <button class="nav-item active" data-tab="home">Trang chủ</button>
+            <button class="nav-item" data-tab="keyinfo">Thông tin key</button>
+            <button class="nav-item" data-tab="admininfo">Thông tin admin</button>
+        </div>
+
+        <div class="tab-content">
+            <div id="home" class="tab-pane active">
+                <div class="update-banner">
+                    <span>Update Aim Target Head</span>
+                </div>
+                <div class="status-row">
+                    <div class="status-item active">✔ Hoạt Động Ôn Định Mượt Mà Trên Adr Và iOS</div>
+                    <div class="status-item active">✔ An Toàn Tài Khoản Game</div>
+                    <div class="status-item active">✔ Tự Động Update</div>
+                </div>
+
+                <div class="game-selector">
+                    <button class="game-btn active" data-game="ff">FF THƯỜNG</button>
+                    <button class="game-btn" data-game="ffmax">FF MAX</button>
+                </div>
+
+                <div class="premium-box" id="loginBox">
+                    <div class="premium-header">PREMIUM LOGIN</div>
+                    <div class="app-name">AimTargetHead</div>
+                    <div class="app-desc">APP Hỗ Trợ Kéo Tâm Trên ADR - IOS AimTargetHead.</div>
+                    <div class="loading-text">Đang Tải Chờ Xíu...</div>
+                    <input type="text" id="keyInput" class="key-input" placeholder="Nhập Key Vào Đây Đi Nè">
+                    <button id="loginBtn" class="login-btn">Đăng nhập</button>
+                </div>
+
+                <div id="activePanel" class="active-panel hidden">
+                    <div class="panel-header" id="activeTypeHeader">KEY ĐÃ KÍCH HOẠT</div>
+                    <div id="activeKeyDisplay" class="key-display-mini"></div>
+                    <div class="toggle-group" id="basicToggles">
+                        <div class="toggle-item">
+                            <span>Fix Rung Tâm</span>
+                            <label class="switch">
+                                <input type="checkbox" id="toggleFixRungTam">
+                                <span class="slider"></span>
+                            </label>
+                            <span class="toggle-note">Ổn định tâm</span>
+                        </div>
+                        <div class="toggle-item">
+                            <span>Fix Lố Đầu</span>
+                            <label class="switch">
+                                <input type="checkbox" id="toggleFixLoDau">
+                                <span class="slider"></span>
+                            </label>
+                            <span class="toggle-note">Chống lố đầu</span>
+                        </div>
+                        <div class="toggle-item">
+                            <span>Fix Lag</span>
+                            <label class="switch">
+                                <input type="checkbox" id="toggleFixLag">
+                                <span class="slider"></span>
+                            </label>
+                            <span class="toggle-note">Giảm giật lag</span>
+                        </div>
+                    </div>
+                    <div class="toggle-group" id="vipToggles" style="display: none;">
+                        <div class="toggle-item">
+                            <span>AimLock</span>
+                            <label class="switch">
+                                <input type="checkbox" id="toggleAimLock">
+                                <span class="slider"></span>
+                            </label>
+                            <span class="toggle-note">Khóa mục tiêu</span>
+                        </div>
+                        <div class="toggle-item">
+                            <span>Bám Đầu</span>
+                            <label class="switch">
+                                <input type="checkbox" id="toggleBamDau">
+                                <span class="slider"></span>
+                            </label>
+                            <span class="toggle-note">Tác dụng hỗ trợ bám</span>
+                        </div>
+                        <div class="toggle-item">
+                            <span>Nhẹ Tâm</span>
+                            <label class="switch">
+                                <input type="checkbox" id="toggleNheTam">
+                                <span class="slider"></span>
+                            </label>
+                            <span class="toggle-note">Tác dụng nhẹ tâm</span>
+                        </div>
+                    </div>
+                    <div class="key-expiry" id="keyExpiryDisplay"></div>
+                </div>
+
+                <div class="zalo-section">
+                    <div class="zalo-link"><span class="zalo-icon">Z</span> Zalo</div>
+                    <div class="get-key-text">Lấy Key Free !</div>
+                </div>
+
+                <div id="monitorPanel" class="monitor-panel hidden">
+                    <div class="monitor-header">RUNTIME MONITOR</div>
+                    <div class="monitor-tabs">
+                        <span class="monitor-game active" data-game="ff">FF</span>
+                        <span class="monitor-game" data-game="ffmax">FFMAX</span>
+                    </div>
+                    <div class="monitor-log" id="monitorLog">
+                        <div class="log-line"><span class="time">[19:54:39]</span> optimize.stream =&gt; armed</div>
+                        <div class="log-line">--&gt; online</div>
+                        <div class="log-line">--&gt; module ready</div>
+                        <div class="log-line">--&gt; cache drift = 0.00</div>
+                        <div class="log-line">--&gt; freefire lock fps</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="keyinfo" class="tab-pane">
+                <div class="info-section">
+                    <h3>Thông tin key của bạn</h3>
+                    <div id="keyInfoContent"><p>Vui lòng đăng nhập để xem thông tin key.</p></div>
+                </div>
+            </div>
+
+            <div id="admininfo" class="tab-pane">
+                <div class="info-section">
+                    <h3>Thông tin Admin</h3>
+                    <p>ADMIN : NGUYENLONGIOS</p>
+                    <p>TIKTOK : nglongxaura.hotrokeotam</p>
+                    <p>ZALO : 0933653553</p>
+                </div>
+                <div id="adminPanel" class="admin-panel hidden">
+                    <h4>🔑 Admin Panel - Quản lý Key</h4>
+                    <div class="admin-create-key">
+                        <h5>Tạo Key Mới</h5>
+                        <div class="form-group">
+                            <label>Key:</label>
+                            <input type="text" id="newKeyString" placeholder="Nhập key mới" class="admin-input">
+                        </div>
+                        <div class="form-group">
+                            <label>Số ngày hiệu lực:</label>
+                            <input type="number" id="newKeyDays" value="7" min="1" class="admin-input">
+                        </div>
+                        <div class="form-group">
+                            <label>Số thiết bị tối đa:</label>
+                            <input type="number" id="newKeyDevices" value="1" min="1" class="admin-input">
+                        </div>
+                        <div class="form-group">
+                            <label>Loại key:</label>
+                            <select id="newKeyType" class="admin-input">
+                                <option value="vip">VIP</option>
+                                <option value="normal">Thường</option>
+                            </select>
+                        </div>
+                        <button id="createKeyBtn" class="admin-btn">Tạo Key</button>
+                    </div>
+                    <div class="admin-key-list">
+                        <h5>Danh sách Key</h5>
+                        <div id="keyListContainer"><p>Đang tải...</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-credit">CRE NGUYENLONGIOS - AIMTARGETHEAD</div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
