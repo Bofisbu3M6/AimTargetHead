@@ -3,128 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>AimTargetHead - Hỗ Trợ Kéo Tâm</title>
+    <title>AimTrickHead - Kéo Tâm Mobile</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="app">
+        <!-- Canvas tuyết -->
         <canvas id="snowCanvas"></canvas>
+
+        <!-- Header -->
         <div class="header">
-            <div class="title">AimTargetHead</div>
-            <div class="subtitle">BUY KEY INBOX ZALO: 0933653553</div>
-            <div class="brand">CRE NGUYENLONGIOS - AIMTARGETHEAD</div>
+            <div class="title">AimTrickHead</div>
+            <div class="subtitle">Key Active By Huy Fanta</div>
+            <div class="brand">CRE HUY FANTA - AIMTRICKHEAD</div>
+            <!-- Nút menu 3 sọc -->
+            <div class="hamburger" id="hamburgerBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
 
-        <div class="navbar">
-            <button class="nav-item active" data-tab="home">Trang chủ</button>
-            <button class="nav-item" data-tab="keyinfo">Thông tin key</button>
-            <button class="nav-item" data-tab="admininfo">Thông tin admin</button>
+        <!-- Menu xổ ra -->
+        <div class="menu-dropdown hidden" id="menuDropdown">
+            <button class="menu-item" data-tab="home">Trang chủ</button>
+            <button class="menu-item" data-tab="keyinfo">Thông tin key</button>
+            <button class="menu-item" data-tab="admininfo">Thông tin admin</button>
         </div>
 
+        <!-- Nội dung chính (các tab) -->
         <div class="tab-content">
+            <!-- Tab Trang chủ -->
             <div id="home" class="tab-pane active">
-                <div class="update-banner">
-                    <span>Update Aim Target Head</span>
-                </div>
-                <div class="status-row">
-                    <div class="status-item active">✔ Hoạt Động Ôn Định Mượt Mà Trên Adr Và iOS</div>
-                    <div class="status-item active">✔ An Toàn Tài Khoản Game</div>
-                    <div class="status-item active">✔ Tự Động Update</div>
-                </div>
-
-                <div class="game-selector">
-                    <button class="game-btn active" data-game="ff">FF THƯỜNG</button>
-                    <button class="game-btn" data-game="ffmax">FF MAX</button>
-                </div>
-
+                <!-- Form đăng nhập luôn hiển thị -->
                 <div class="premium-box" id="loginBox">
                     <div class="premium-header">PREMIUM LOGIN</div>
-                    <div class="app-name">AimTargetHead</div>
-                    <div class="app-desc">APP Hỗ Trợ Kéo Tâm Trên ADR - IOS AimTargetHead.</div>
+                    <div class="app-name">AimTrickHead</div>
+                    <div class="app-desc">APP Hỗ Trợ Kéo Tâm Trên ADR - IOS AimTrickHead.</div>
                     <div class="loading-text">Đang Tải Chờ Xíu...</div>
                     <input type="text" id="keyInput" class="key-input" placeholder="Nhập Key Vào Đây Đi Nè">
                     <button id="loginBtn" class="login-btn">Đăng nhập</button>
                 </div>
 
-                <div id="activePanel" class="active-panel hidden">
-                    <div class="panel-header" id="activeTypeHeader">KEY ĐÃ KÍCH HOẠT</div>
-                    <div id="activeKeyDisplay" class="key-display-mini"></div>
-                    <div class="toggle-group" id="basicToggles">
-                        <div class="toggle-item">
-                            <span>Fix Rung Tâm</span>
-                            <label class="switch">
-                                <input type="checkbox" id="toggleFixRungTam">
-                                <span class="slider"></span>
-                            </label>
-                            <span class="toggle-note">Ổn định tâm</span>
-                        </div>
-                        <div class="toggle-item">
-                            <span>Fix Lố Đầu</span>
-                            <label class="switch">
-                                <input type="checkbox" id="toggleFixLoDau">
-                                <span class="slider"></span>
-                            </label>
-                            <span class="toggle-note">Chống lố đầu</span>
-                        </div>
-                        <div class="toggle-item">
-                            <span>Fix Lag</span>
-                            <label class="switch">
-                                <input type="checkbox" id="toggleFixLag">
-                                <span class="slider"></span>
-                            </label>
-                            <span class="toggle-note">Giảm giật lag</span>
-                        </div>
+                <!-- Nội dung sau khi đăng nhập (ban đầu ẩn) -->
+                <div id="homeContent" style="display: none;">
+                    <div class="update-banner">
+                        <span>Update Aim Trick Head Mobile</span>
                     </div>
-                    <div class="toggle-group" id="vipToggles" style="display: none;">
-                        <div class="toggle-item">
-                            <span>AimLock</span>
-                            <label class="switch">
-                                <input type="checkbox" id="toggleAimLock">
-                                <span class="slider"></span>
-                            </label>
-                            <span class="toggle-note">Khóa mục tiêu</span>
-                        </div>
-                        <div class="toggle-item">
-                            <span>Bám Đầu</span>
-                            <label class="switch">
-                                <input type="checkbox" id="toggleBamDau">
-                                <span class="slider"></span>
-                            </label>
-                            <span class="toggle-note">Tác dụng hỗ trợ bám</span>
-                        </div>
-                        <div class="toggle-item">
-                            <span>Nhẹ Tâm</span>
-                            <label class="switch">
-                                <input type="checkbox" id="toggleNheTam">
-                                <span class="slider"></span>
-                            </label>
-                            <span class="toggle-note">Tác dụng nhẹ tâm</span>
-                        </div>
+                    <div class="status-row">
+                        <div class="status-item active">✔ Hoạt Động Ôn Định Mượt Mà Trên Adr Và iOS</div>
+                        <div class="status-item active">✔ An Toàn Tài Khoản Game</div>
+                        <div class="status-item active">✔ Tự Động Update</div>
                     </div>
-                    <div class="key-expiry" id="keyExpiryDisplay"></div>
-                </div>
 
-                <div class="zalo-section">
-                    <div class="zalo-link"><span class="zalo-icon">Z</span> Zalo</div>
-                    <div class="get-key-text">Lấy Key Free !</div>
-                </div>
+                    <!-- Vùng hiển thị key + chức năng (như ảnh 2) -->
+                    <div id="activePanel" class="active-panel hidden">
+                        <div class="panel-header">VIP ACTIVE</div>
+                        <div class="support-row">
+                            <span class="support-badge">Support</span> Hỗ Trợ FF
+                            <span class="support-badge">Support</span> Hỗ Trợ FFMAX
+                        </div>
+                        <div class="device-info">Device: All Mobile</div>
 
-                <div id="monitorPanel" class="monitor-panel hidden">
-                    <div class="monitor-header">RUNTIME MONITOR</div>
-                    <div class="monitor-tabs">
-                        <span class="monitor-game active" data-game="ff">FF</span>
-                        <span class="monitor-game" data-game="ffmax">FFMAX</span>
+                        <div class="key-info">
+                            <div><strong>Key:</strong> <span id="displayKey">KEY-HFTOK9981</span></div>
+                            <div><strong>Hiệu lực còn:</strong> <span id="expiryCountdown">1 ngày 15 giờ 44 phút</span></div>
+                            <div><strong>Hết hạn lúc:</strong> <span id="expiryDateDisplay">11:39:15 22/4/2026</span></div>
+                        </div>
+
+                        <!-- Các nút tab (Main, Optimize+, Social, TikTok) -->
+                        <div class="tab-bar">
+                            <button class="tab active" data-subtab="main">Main</button>
+                            <button class="tab" data-subtab="optimize">Optimize+</button>
+                            <button class="tab" data-subtab="social">Social</button>
+                            <button class="tab" data-subtab="tiktok">TikTok</button>
+                        </div>
+
+                        <!-- Nội dung các sub tab (chỉ hiện tab Main là đầy đủ) -->
+                        <div class="subtab-content">
+                            <div id="subtab-main" class="subtab-pane active">
+                                <div class="toggle-group">
+                                    <div class="toggle-item">
+                                        <span>AimTrickHead</span>
+                                        <label class="switch">
+                                            <input type="checkbox" id="toggleAimTrickHead">
+                                            <span class="slider"></span>
+                                        </label>
+                                        <span class="toggle-note">Chức Năng Hỗ Trợ Kéo Tâm Trọng APP</span>
+                                    </div>
+                                    <div class="toggle-item">
+                                        <span>Bám Đầu</span>
+                                        <label class="switch">
+                                            <input type="checkbox" id="toggleBamDau">
+                                            <span class="slider"></span>
+                                        </label>
+                                        <span class="toggle-note">Tác dụng hỗ trợ bám</span>
+                                    </div>
+                                    <div class="toggle-item">
+                                        <span>Nhẹ Tâm</span>
+                                        <label class="switch">
+                                            <input type="checkbox" id="toggleNheTam">
+                                            <span class="slider"></span>
+                                        </label>
+                                        <span class="toggle-note">Tác dụng nhẹ tâm</span>
+                                    </div>
+                                </div>
+                                <div class="key-expiry" id="keyExpiryMini">Key còn hiệu lực: 1 ngày 15 giờ 44 phút</div>
+                            </div>
+                            <div id="subtab-optimize" class="subtab-pane">Nội dung Optimize+</div>
+                            <div id="subtab-social" class="subtab-pane">Nội dung Social</div>
+                            <div id="subtab-tiktok" class="subtab-pane">Nội dung TikTok</div>
+                        </div>
                     </div>
-                    <div class="monitor-log" id="monitorLog">
-                        <div class="log-line"><span class="time">[19:54:39]</span> optimize.stream =&gt; armed</div>
-                        <div class="log-line">--&gt; online</div>
-                        <div class="log-line">--&gt; module ready</div>
-                        <div class="log-line">--&gt; cache drift = 0.00</div>
-                        <div class="log-line">--&gt; freefire lock fps</div>
+
+                    <!-- Zalo (chỉ Zalo, không Facebook) -->
+                    <div class="zalo-section">
+                        <div class="zalo-link"><span class="zalo-icon">Z</span> Zalo</div>
+                        <div class="get-key-text">Lấy Key Free !</div>
+                    </div>
+
+                    <!-- Monitor Panel (như ảnh 3) -->
+                    <div id="monitorPanel" class="monitor-panel">
+                        <div class="monitor-header">RUNTIME MONITOR <span class="locked">LOCKED</span></div>
+                        <div class="monitor-tabs">
+                            <span class="monitor-game active" data-game="ff">FF</span>
+                            <span class="monitor-game" data-game="ffmax">FFMAX</span>
+                        </div>
+                        <div class="monitor-log" id="monitorLog">
+                            <div class="log-line"><span class="time">[19:54:39]</span> optimize.stream =&gt; armed</div>
+                            <div class="log-line">--&gt; online</div>
+                            <div class="log-line">--&gt; module ready</div>
+                            <div class="log-line">--&gt; cache drift = 0.00</div>
+                            <div class="log-line">--&gt; freefire lock fps</div>
+                        </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Tab Thông tin key -->
             <div id="keyinfo" class="tab-pane">
                 <div class="info-section">
                     <h3>Thông tin key của bạn</h3>
@@ -132,6 +148,7 @@
                 </div>
             </div>
 
+            <!-- Tab Thông tin admin -->
             <div id="admininfo" class="tab-pane">
                 <div class="info-section">
                     <h3>Thông tin Admin</h3>
@@ -139,6 +156,7 @@
                     <p>TIKTOK : nglongxaura.hotrokeotam</p>
                     <p>ZALO : 0933653553</p>
                 </div>
+                <!-- Admin Panel (chỉ admin thấy) -->
                 <div id="adminPanel" class="admin-panel hidden">
                     <h4>🔑 Admin Panel - Quản lý Key</h4>
                     <div class="admin-create-key">
@@ -171,8 +189,14 @@
                 </div>
             </div>
         </div>
-        <div class="footer-credit">CRE NGUYENLONGIOS - AIMTARGETHEAD</div>
+
+        <!-- Footer với nút đăng xuất (chỉ hiện khi đăng nhập) -->
+        <div class="footer">
+            <button id="logoutBtn" class="logout-btn" style="display: none;">Đăng xuất</button>
+            <div class="footer-credit">CRE HUY FANTA - AIMTRICKHEAD</div>
+        </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
