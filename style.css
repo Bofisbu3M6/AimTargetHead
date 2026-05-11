@@ -69,7 +69,6 @@ body {
     letter-spacing: 0.8px;
 }
 
-/* Hamburger menu */
 .hamburger {
     position: absolute;
     right: 5px;
@@ -91,7 +90,6 @@ body {
     transition: 0.3s;
 }
 
-/* Menu dropdown */
 .menu-dropdown {
     position: absolute;
     top: 65px;
@@ -127,7 +125,6 @@ body {
     display: none !important;
 }
 
-/* Tab pane (trang chủ, thông tin key, admin) */
 .tab-pane {
     display: none;
     position: relative;
@@ -138,7 +135,6 @@ body {
     display: block;
 }
 
-/* Premium box */
 .premium-box {
     background: #151515;
     border-radius: 20px;
@@ -210,7 +206,6 @@ body {
     box-shadow: 0 0 15px #ff1744;
 }
 
-/* Update banner */
 .update-banner {
     background: rgba(255, 23, 68, 0.15);
     border: 1px solid #ff1744;
@@ -240,7 +235,6 @@ body {
     color: #b0b0b0;
 }
 
-/* Active Panel (VIP ACTIVE) */
 .active-panel {
     background: #151515;
     border-radius: 18px;
@@ -291,36 +285,13 @@ body {
     color: #bbb;
 }
 
-.tab-bar {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 15px;
-}
-
-.tab {
-    flex: 1;
-    padding: 8px 4px;
-    background: #2a2a2a;
-    border: none;
-    border-radius: 8px;
-    color: #aaa;
+.main-title {
+    text-align: center;
+    font-size: 18px;
     font-weight: bold;
-    font-size: 13px;
-    cursor: pointer;
-}
-
-.tab.active {
-    background: #ff1744;
-    color: white;
-    box-shadow: 0 0 10px rgba(255, 23, 68, 0.6);
-}
-
-.subtab-pane {
-    display: none;
-}
-
-.subtab-pane.active {
-    display: block;
+    color: #ff6d00;
+    margin: 10px 0 15px;
+    text-transform: uppercase;
 }
 
 .toggle-group {
@@ -342,7 +313,6 @@ body {
     margin-left: auto;
 }
 
-/* Switch */
 .switch {
     position: relative;
     display: inline-block;
@@ -390,7 +360,6 @@ input:checked + .slider:before {
     font-weight: bold;
 }
 
-/* Zalo section */
 .zalo-section {
     background: #1a1a1a;
     border-radius: 12px;
@@ -430,7 +399,6 @@ input:checked + .slider:before {
     50% { opacity: 0.4; }
 }
 
-/* Monitor Panel */
 .monitor-panel {
     background: #0a0a0a;
     border-radius: 14px;
@@ -487,7 +455,6 @@ input:checked + .slider:before {
 .log-line { white-space: pre-wrap; word-break: break-all; }
 .time { color: #ff6d00; }
 
-/* Info section */
 .info-section {
     background: #1c1c1c;
     border-radius: 18px;
@@ -542,7 +509,6 @@ input:checked + .slider:before {
     cursor: pointer;
 }
 
-/* Footer */
 .footer {
     text-align: center;
     margin-top: 15px;
