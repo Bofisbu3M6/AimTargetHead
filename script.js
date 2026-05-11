@@ -1,10 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // ==================== Key Admin ====================
     const ADMIN_KEY = 'STORENGUYENLONGIOS';
     let currentUser = null;
     let currentKeyData = null;
 
-    // ==================== Storage Key ====================
     function loadKeys() {
         const stored = localStorage.getItem('aimtrick_keys');
         if (stored) return JSON.parse(stored);
@@ -23,11 +21,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let keys = loadKeys();
 
-    // ==================== UI Elements ====================
+    // UI elements
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const menuDropdown = document.getElementById('menuDropdown');
     const menuItems = document.querySelectorAll('.menu-item');
-    const tabPanes = document.querySelectorAll('.tab-pane'); // Các tab chính (home, keyinfo, admininfo)
+    const tabPanes = document.querySelectorAll('.tab-pane');
 
     const loginBox = document.getElementById('loginBox');
     const homeContent = document.getElementById('homeContent');
@@ -42,10 +40,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const expiryDateDisplay = document.getElementById('expiryDateDisplay');
     const keyExpiryMini = document.getElementById('keyExpiryMini');
 
-    // Toggle elements
-    const toggleAim = document.getElementById('toggleAimTrickHead');
+    // Toggle cơ bản
+    const toggleFixRungTam = document.getElementById('toggleFixRungTam');
+    const toggleFixLoDau = document.getElementById('toggleFixLoDau');
+    const toggleFixLag = document.getElementById('toggleFixLag');
+
+    // Toggle VIP
     const toggleBamDau = document.getElementById('toggleBamDau');
+    const toggleAimLock = document.getElementById('toggleAimLock');
+    const toggleSensiLock = document.getElementById('toggleSensiLock');
     const toggleNheTam = document.getElementById('toggleNheTam');
+    const toggleTangTocMang = document.getElementById('toggleTangTocMang');
+
+    const vipToggles = document.getElementById('vipToggles');
 
     // Admin
     const adminPanel = document.getElementById('adminPanel');
@@ -60,12 +67,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const monitorLog = document.getElementById('monitorLog');
     const monitorGames = document.querySelectorAll('.monitor-game');
 
-    // Subtabs (Main, Optimize+, Social, TikTok)
-    const subTabs = document.querySelectorAll('.tab');
-    const subTabPanes = document.querySelectorAll('.subtab-pane');
+    // ==================== Helper ====================
+    function canUseBasic() {
+        return currentUser && (currentKeyData.type === 'normal' || currentKeyData.type === 'vip' || currentKeyData.type === 'admin');
+    }
 
-    // ==================== Hàm tiện ích ====================
-    function canUseVipFeatures() {
+    function canUseVip() {
         return currentUser && (currentKeyData.type === 'vip' || currentKeyData.type === 'admin');
     }
 
@@ -98,72 +105,59 @@ document.addEventListener('DOMContentLoaded', function() {
         keyExpiryMini.textContent = 'Key còn hiệu lực: ' + text;
     }
 
-    // ==================== CÁC HÀM CUSTOM – THÊM CODE CỦA BẠN VÀO ĐÂY ====================
-    function aimTrickHeadCustom(isEnabled) {
-        // ====== THÊM CODE CỦA BẠN CHO AIMTRICKHEAD ======
-        if (isEnabled) {
-            // Code khi bật AimTrickHead
-        } else {
-            // Code khi tắt AimTrickHead
-        }
+    // ==================== CUSTOM FUNCTIONS ====================
+    function fixRungTamCustom(isEnabled) {
+        // ====== THÊM CODE CỦA BẠN CHO FIX RUNG TÂM ======
+        if (isEnabled) { } else { }
     }
-
+    function fixLoDauCustom(isEnabled) {
+        // ====== THÊM CODE CỦA BẠN CHO FIX LỐ ĐẦU ======
+        if (isEnabled) { } else { }
+    }
+    function fixLagCustom(isEnabled) {
+        // ====== THÊM CODE CỦA BẠN CHO FIX LAG ======
+        if (isEnabled) { } else { }
+    }
     function bamDauCustom(isEnabled) {
         // ====== THÊM CODE CỦA BẠN CHO BÁM ĐẦU ======
-        if (isEnabled) {
-            // Code khi bật Bám Đầu
-        } else {
-            // Code khi tắt Bám Đầu
-        }
+        if (isEnabled) { } else { }
     }
-
+    function aimLockCustom(isEnabled) {
+        // ====== THÊM CODE CỦA BẠN CHO AIMLOCK ======
+        if (isEnabled) { } else { }
+    }
+    function sensiLockCustom(isEnabled) {
+        // ====== THÊM CODE CỦA BẠN CHO SENSILOCK ======
+        if (isEnabled) { } else { }
+    }
     function nheTamCustom(isEnabled) {
         // ====== THÊM CODE CỦA BẠN CHO NHẸ TÂM ======
-        if (isEnabled) {
-            // Code khi bật Nhẹ Tâm
-        } else {
-            // Code khi tắt Nhẹ Tâm
-        }
+        if (isEnabled) { } else { }
+    }
+    function tangTocMangCustom(isEnabled) {
+        // ====== THÊM CODE CỦA BẠN CHO TĂNG TỐC ĐỘ MẠNG ======
+        if (isEnabled) { } else { }
     }
 
-    // ==================== Xử lý bật/tắt (gọi hàm custom + log) ====================
-    function handleAimTrickHead(checked) {
-        if (!canUseVipFeatures()) {
-            toggleAim.checked = false;
-            return;
-        }
-        aimTrickHeadCustom(checked);
-        addLogLine('AimTrickHead ' + (checked ? 'ON' : 'OFF'));
+    // ==================== Gán sự kiện toggle ====================
+    function setupToggle(toggle, customFn, requireBasic = true, requireVip = false) {
+        toggle.addEventListener('change', function() {
+            const checked = this.checked;
+            if (requireBasic && !canUseBasic()) { this.checked = false; return; }
+            if (requireVip && !canUseVip()) { this.checked = false; return; }
+            customFn(checked);
+            addLogLine(toggle.id.replace('toggle','') + ' ' + (checked ? 'ON' : 'OFF'));
+        });
     }
 
-    function handleBamDau(checked) {
-        if (!canUseVipFeatures()) {
-            toggleBamDau.checked = false;
-            return;
-        }
-        bamDauCustom(checked);
-        addLogLine('Bám Đầu ' + (checked ? 'ON' : 'OFF'));
-    }
-
-    function handleNheTam(checked) {
-        if (!canUseVipFeatures()) {
-            toggleNheTam.checked = false;
-            return;
-        }
-        nheTamCustom(checked);
-        addLogLine('Nhẹ Tâm ' + (checked ? 'ON' : 'OFF'));
-    }
-
-    // Gắn sự kiện cho 3 toggle
-    toggleAim.addEventListener('change', function() {
-        handleAimTrickHead(this.checked);
-    });
-    toggleBamDau.addEventListener('change', function() {
-        handleBamDau(this.checked);
-    });
-    toggleNheTam.addEventListener('change', function() {
-        handleNheTam(this.checked);
-    });
+    setupToggle(toggleFixRungTam, fixRungTamCustom, true, false);
+    setupToggle(toggleFixLoDau, fixLoDauCustom, true, false);
+    setupToggle(toggleFixLag, fixLagCustom, true, false);
+    setupToggle(toggleBamDau, bamDauCustom, false, true);
+    setupToggle(toggleAimLock, aimLockCustom, false, true);
+    setupToggle(toggleSensiLock, sensiLockCustom, false, true);
+    setupToggle(toggleNheTam, nheTamCustom, false, true);
+    setupToggle(toggleTangTocMang, tangTocMangCustom, false, true);
 
     // ==================== Menu 3 sọc ====================
     hamburgerBtn.addEventListener('click', () => {
@@ -187,68 +181,39 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // ==================== Xử lý subtab (Main, Optimize+, Social, TikTok) ====================
-    subTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            // Bỏ active tất cả tab
-            subTabs.forEach(t => t.classList.remove('active'));
-            // Thêm active cho tab hiện tại
-            tab.classList.add('active');
-            // Ẩn tất cả pane
-            subTabPanes.forEach(pane => pane.classList.remove('active'));
-            // Hiện pane tương ứng
-            const target = tab.getAttribute('data-subtab');
-            const targetPane = document.getElementById('subtab-' + target);
-            if (targetPane) {
-                targetPane.classList.add('active');
-            }
-            // Log
-            addLogLine('Tab: ' + tab.textContent);
-        });
-    });
-
     // ==================== Đăng nhập ====================
     loginBtn.addEventListener('click', () => {
         const inputKey = keyInput.value.trim();
-        if (!inputKey) {
-            alert('Vui lòng nhập key');
-            return;
-        }
+        if (!inputKey) { alert('Vui lòng nhập key'); return; }
 
         if (inputKey === ADMIN_KEY) {
             currentUser = 'admin';
-            currentKeyData = {
-                key: ADMIN_KEY,
-                type: 'admin',
-                expiry: '2099-12-31T23:59:59',
-                devices: 999
-            };
+            currentKeyData = { key: ADMIN_KEY, type: 'admin', expiry: '2099-12-31T23:59:59', devices: 999 };
         } else {
             const found = keys.find(k => k.key === inputKey);
-            if (!found) {
-                alert('Key không hợp lệ');
-                return;
-            }
-            if (new Date(found.expiry) < new Date()) {
-                alert('Key đã hết hạn');
-                return;
-            }
+            if (!found) { alert('Key không hợp lệ'); return; }
+            if (new Date(found.expiry) < new Date()) { alert('Key đã hết hạn'); return; }
             currentUser = 'user';
             currentKeyData = found;
         }
 
-        // Hiện giao diện
         loginBox.classList.add('hidden');
         homeContent.style.display = 'block';
         activePanel.classList.remove('hidden');
         monitorPanel.classList.remove('hidden');
         logoutBtn.style.display = 'inline-block';
 
-        // Điền thông tin key
         displayKey.textContent = currentKeyData.key;
         expiryDateDisplay.textContent = new Date(currentKeyData.expiry).toLocaleString('vi-VN');
         updateCountdownUI();
         setInterval(updateCountdownUI, 1000);
+
+        // Hiển thị/ẩn nhóm VIP
+        if (canUseVip()) {
+            vipToggles.style.display = 'flex';
+        } else {
+            vipToggles.style.display = 'none';
+        }
 
         // Admin
         if (currentUser === 'admin') {
@@ -258,13 +223,20 @@ document.addEventListener('DOMContentLoaded', function() {
             adminPanel.classList.add('hidden');
         }
 
-        // Reset toggle về OFF và gọi custom (tắt nếu cần)
-        toggleAim.checked = false;
-        toggleBamDau.checked = false;
-        toggleNheTam.checked = false;
-        aimTrickHeadCustom(false);
+        // Reset tất cả toggle về OFF
+        const allToggles = [toggleFixRungTam, toggleFixLoDau, toggleFixLag, toggleBamDau, toggleAimLock, toggleSensiLock, toggleNheTam, toggleTangTocMang];
+        allToggles.forEach(t => {
+            t.checked = false;
+            // Gọi custom với false để tắt (nếu trước đó đang bật)
+        });
+        fixRungTamCustom(false);
+        fixLoDauCustom(false);
+        fixLagCustom(false);
         bamDauCustom(false);
+        aimLockCustom(false);
+        sensiLockCustom(false);
         nheTamCustom(false);
+        tangTocMangCustom(false);
 
         updateKeyInfoTab();
         updateAdminInfoTab();
@@ -273,19 +245,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Đăng xuất
     logoutBtn.addEventListener('click', () => {
-        // Tắt tất cả chức năng trước khi đăng xuất
-        if (toggleAim.checked) {
-            toggleAim.checked = false;
-            aimTrickHeadCustom(false);
-        }
-        if (toggleBamDau.checked) {
-            toggleBamDau.checked = false;
-            bamDauCustom(false);
-        }
-        if (toggleNheTam.checked) {
-            toggleNheTam.checked = false;
-            nheTamCustom(false);
-        }
+        // Tắt tất cả chức năng
+        const allToggles = [toggleFixRungTam, toggleFixLoDau, toggleFixLag, toggleBamDau, toggleAimLock, toggleSensiLock, toggleNheTam, toggleTangTocMang];
+        allToggles.forEach(t => t.checked = false);
+        fixRungTamCustom(false);
+        fixLoDauCustom(false);
+        fixLagCustom(false);
+        bamDauCustom(false);
+        aimLockCustom(false);
+        sensiLockCustom(false);
+        nheTamCustom(false);
+        tangTocMangCustom(false);
 
         currentUser = null;
         currentKeyData = null;
@@ -427,6 +397,5 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('resize', ()=>{ resize(); create(); });
     resize(); create(); loop();
 
-    // Khởi động
     addLogLine('Hệ thống sẵn sàng...');
 });
