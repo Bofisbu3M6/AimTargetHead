@@ -294,17 +294,37 @@ body {
     text-transform: uppercase;
 }
 
+/* === PHẦN TOGGLE ĐÃ SỬA === */
 .toggle-group {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;  /* Tăng khoảng cách giữa các dòng */
+    margin-top: 12px;
 }
 
 .toggle-item {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     font-weight: 600;
+    padding: 12px 15px;
+    background: #1a1a1a;
+    border-radius: 12px;
+    border: 1px solid #2a2a2a;
+    transition: all 0.3s ease;
+    color: #ddd;
+}
+
+/* Hiệu ứng khi bật (class enabled từ JS) */
+.toggle-item.enabled {
+    background: #2a0a0a;
+    border-color: #ff1744;
+    box-shadow: 0 0 12px rgba(255, 23, 68, 0.4);
+    color: #ff6d00;
+}
+
+.toggle-item.enabled .toggle-note {
+    color: #ff6d00;
 }
 
 .toggle-note {
@@ -313,6 +333,7 @@ body {
     margin-left: auto;
 }
 
+/* Switch */
 .switch {
     position: relative;
     display: inline-block;
@@ -360,6 +381,7 @@ input:checked + .slider:before {
     font-weight: bold;
 }
 
+/* Các phần còn lại giữ nguyên */
 .zalo-section {
     background: #1a1a1a;
     border-radius: 12px;
